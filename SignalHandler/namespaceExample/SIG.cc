@@ -77,8 +77,12 @@ namespace SIG {
 	   iter != rangeIter.second;
 	   ++iter) {
 	CB* cb = iter->second;
-	std::pair<std::set<callbackFunction>::iterator, bool> success = h->deduper->insert(cb->cb);
-	if (success.second == true) {
+	bool shouldCall = true;
+	if (h->safe) {
+	  std::pair<std::set<callbackFunction>::iterator, bool> success = h->deduper->insert(cb->cb);
+	  shouldCall = success.second;
+	}
+	if (shouldCall) {
 	  cb->cb(cb->tag);
 	}
       }
