@@ -52,8 +52,12 @@ class SignalHandler {
 	 iter != rangeIter.second;
 	 ++iter) {
       Callable* cb = iter->second;
-      std::pair<std::set<Callable*>::iterator, bool> success = deduper->insert(cb);
-      if (success.second == true) {
+      bool shouldCall = true;
+      if (safe) {
+	std::pair<std::set<Callable*>::iterator, bool> success = deduper->insert(cb);
+	shouldCall = success.second;
+      }
+      if (shouldCall) {
 	cb->call();
       }
     }
