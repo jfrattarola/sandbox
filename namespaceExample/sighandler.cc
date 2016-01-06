@@ -59,22 +59,36 @@ void infLoopSignalCB( void* tag ) {
 int main() {
 
   TEST* test = (TEST*)malloc(sizeof(*test));
+  printf("Initializing SIG::HANDLE\n");
   test->sh = SIG::init();
-  
-  SIG::registerCallback( test->sh, SINGLE_SIG, singleSignalCB, test );
-  SIG::registerCallback( test->sh, MULTI_SIG, multiSignalCB1, test );
-  SIG::registerCallback( test->sh, MULTI_SIG, multiSignalCB2, test );
-  SIG::registerCallback( test->sh, MULTI_SIG, multiSignalCB3, test );
-  SIG::registerCallback( test->sh, REG_SIG, registerSignalCB, test );
-  SIG::registerCallback( test->sh, RECURS_SIG, recursiveSignalCB, test );
-  SIG::registerCallback( test->sh, ERROR_SIG, infLoopSignalCB, test );
 
+  printf("Calling registerCallback( SINGLE_SIG, singleSignalCB )\n");  
+  SIG::registerCallback( test->sh, SINGLE_SIG, singleSignalCB, test );
+  printf("Calling registerCallback( MULTI_SIG, multiSignalCB1 )\n");  
+  SIG::registerCallback( test->sh, MULTI_SIG, multiSignalCB1, test );
+  printf("Calling registerCallback( MULTI_SIG, multiSignalCB2 )\n");  
+  SIG::registerCallback( test->sh, MULTI_SIG, multiSignalCB2, test );
+  printf("Calling registerCallback( MULTI_SIG, multiSignalCB3 )\n");  
+  SIG::registerCallback( test->sh, MULTI_SIG, multiSignalCB3, test );
+  printf("Calling registerCallback( REG_SIG, registerSignalCB )\n");  
+  SIG::registerCallback( test->sh, REG_SIG, registerSignalCB, test );
+  printf("Calling registerCallback( RECURS_SIG, recursiveSignalCB )\n");  
+  SIG::registerCallback( test->sh, RECURS_SIG, recursiveSignalCB, test );
+  printf("Calling registerCallback( ERROR_SIG, infLoopSignalCB )\n");  
+  SIG::registerCallback( test->sh, ERROR_SIG, infLoopSignalCB, test );
+  printf("\n");
+  printf("\n$ Invoking signal(SINGLE_SIG)...\n");
   SIG::signal( test->sh, SINGLE_SIG );
+  printf("\n$ Invoking signal(REG_SIG) - this should deregister multi3 and register multi4...\n");
   SIG::signal( test->sh, REG_SIG );
+  printf("\n$ Invoking signal(MULTI_SIG) - was REG_SIG successful?...\n");
   SIG::signal( test->sh, MULTI_SIG );
+  printf("\n$ Invoking signal(RECURS_SIG) - will call signal for SINGLE_SIG...\n");
   SIG::signal( test->sh, RECURS_SIG );
+  printf("\n$ Invoking signal(ERROR_SIG) - this will cause an infinite loop unless safe was set to true...\n");
   SIG::signal( test->sh, ERROR_SIG );
 
+  printf("\nDestroying SIG::HANDLE\n");
   SIG::destroy(test->sh);
   free(test);
   return 0;
