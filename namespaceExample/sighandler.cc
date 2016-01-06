@@ -50,7 +50,7 @@ void recursiveSignalCB( void* tag ) {
 }
 
 void infLoopSignalCB( void* tag ) {
-  printf("RECURS_SIG was raised.\n");
+  printf("ERROR_SIG was raised.\n");
   printf("\tWill raise signal: ERROR_SIG now...This will initiate a recursive, infinite loop if not handled correctly.\n");
   TEST* test = (TEST*)tag;
   SIG::signal( test->sh, ERROR_SIG ); 
