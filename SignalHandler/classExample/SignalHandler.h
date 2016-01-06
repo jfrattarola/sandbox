@@ -6,6 +6,14 @@
 #include <set>
 
 class SignalHandler {
+  /* If safe is true, a callback function can only be called once.  
+     This will prevent accidental infinite callback loops where A either calls
+     A directly, or some callback function triggered by A ends up calling A again 
+     somewhere down the chain.
+     However, this prevents a single function to be called multiple times in a safe way
+     ( for instance, B is some logging function, which is called in the set of cb by each signal raised.
+     if multiple signals are raised, B would only log the first)
+  */
  public :
   SignalHandler(bool _safe=true) {
     safe = _safe;
