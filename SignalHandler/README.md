@@ -31,7 +31,8 @@ An executable, named "sighandler" is produced and should be run without any argu
 ## Sample Output
 Depending on which version was run and/or whether the code was modified, output similar to the following should be printed to stdout:
 
-`Instantiating SignalHandler
+```
+Instantiating SignalHandler
 Calling registerCallback( SINGLE_SIG, SingleCallable )
 Calling registerCallback( MULTI_SIG, MultiCallable(1) )
 Calling registerCallback( MULTI_SIG, MultiCallable(2) )
@@ -61,4 +62,5 @@ SINGLE_SIG was raised
 
 $ Invoking signal(ERROR_SIG) - this will cause an infinite loop unless safe was set to true...
 ERROR_SIG was raised.
-	Will raise signal: ERROR_SIG now...This will initiate a recursive, infinite loop if not handled correctly.`
+	Will raise signal: ERROR_SIG now...This will initiate a recursive, infinite loop if not handled correctly.
+```
