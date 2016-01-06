@@ -27,3 +27,38 @@ I present two versions here, one under the folder "namespaceExample" and one und
 Both versions of the solution may be built by executing `./build.sh`
 
 An executable, named "sighandler" is produced and should be run without any arguments.
+
+## Sample Output
+Depending on which version was run and/or whether the code was modified, output similar to the following should be printed to stdout:
+
+`Instantiating SignalHandler
+Calling registerCallback( SINGLE_SIG, SingleCallable )
+Calling registerCallback( MULTI_SIG, MultiCallable(1) )
+Calling registerCallback( MULTI_SIG, MultiCallable(2) )
+Calling registerCallback( MULTI_SIG, MultiCallable(3) )
+Calling registerCallback( REG_SIG, RegisterCallable )
+Calling registerCallback( RECURS_SIG, RecursiveCallable )
+Calling registerCallback( ERROR_SIG, InfiniteCallable )
+
+
+$ Invoking signal(SINGLE_SIG)...
+SINGLE_SIG was raised
+
+$ Invoking signal(REG_SIG) - this should deregister multi3 and register multi4...
+REG_SIG was raised.
+	Will unregister function 3 for  MULTI_SIG
+	Will register function 4 for MULTI_SIG
+
+$ Invoking signal(MULTI_SIG) - was REG_SIG successful?...
+MULTI_SIG was raised. In function 1
+MULTI_SIG was raised. In function 2
+MULTI_SIG was raised. In function 4
+
+$ Invoking signal(RECURS_SIG) - will call signal for SINGLE_SIG...
+RECURS_SIG was raised.
+	Will raise signal: SINGLE_SIG now
+SINGLE_SIG was raised
+
+$ Invoking signal(ERROR_SIG) - this will cause an infinite loop unless safe was set to true...
+ERROR_SIG was raised.
+	Will raise signal: ERROR_SIG now...This will initiate a recursive, infinite loop if not handled correctly.`
